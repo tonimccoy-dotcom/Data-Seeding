@@ -1,0 +1,97 @@
+# Remove restriction CP_Legal_Representation__c
+# Remove restriction CP_Congressional_Privacy_Release_Receivd__c
+# Remove restriction CP_Permission_to_Contact_Taxpayer__c
+# Remove restriction CP_Permission_to_Leave_Voicemails__c
+# Remove restriction CP_Permission_to_Receive_Notifications__c
+
+- plugin: snowfakery.standard_plugins.Salesforce.SalesforceQuery
+- plugin: snowfakery.standard_plugins.Salesforce
+- plugin: snowfakery.standard_plugins.Salesforce.SOQLDataset
+
+- snowfakery_version: 3
+- object: CP_Congressional_Request__c
+  count: 1
+  fields:
+    __random_recordtype:
+      SOQLDataset.iterate:
+        fields: Id, Name, DeveloperName
+        from: recordtype
+        where: RecordType.sobjecttype in ('CP_Congressional_Request__c')  
+    __random_account:
+      SOQLDataset.iterate:
+        fields: Id
+        from: account
+        where: RecordType.DeveloperName in ('TAS_Congressional_Office')
+    __random_case:
+      SOQLDataset.iterate:
+        fields: Id
+        from: Case
+        where: RecordType.DeveloperName in ('TAS_Case_Advocacy','TAS_Systemic_Issue')
+    #CP_Address__c: ${{fake.Address}}
+    CP_Request_Escalated__c: ${{fake.Boolean(chance_of_getting_true=50)}}
+    CP_Email__c: ${{fake.Email}}
+    Congressional_Contact_Email__c: ${{fake.Email}}
+    CP_Description_of_Desired_Outcome__c: ${{fake.paragraph(nb_sentences=5)}}
+    CP_Description_of_Issue__c: ${{fake.paragraph(nb_sentences=5)}}
+    CP_Case__c: ${{__random_case.Id}}
+    CP_Congressional_Office__c: ${{__random_account.Id}}
+    CP_Phone__c: ${{fake.PhoneNumber}}
+
+    CP_Congressional_Privacy_Release_Receivd__c:            
+      random_choice:
+        - "Yes"
+        - "No"
+    CP_Legal_Representation__c:                
+      random_choice:
+        - "Yes"
+        - "No"
+        - "Unknown"
+    CP_Permission_to_Contact_Taxpayer__c:           
+      random_choice:
+        - "Yes"
+        - "No"
+    CP_Permission_to_Leave_Voicemails__c:          
+      random_choice:
+        - "Yes"
+        - "No"
+    CP_Permission_to_Receive_Notifications__c:                  # need requirement for this field
+      random_choice:
+        - "Yes"
+        - "No"
+    CP_Request_Origin__c:                  # need requirement for this field
+      random_choice:
+        - Congressional referral - direct to TAS
+        - Congressional referral - via E-Trak
+        - Congressional referral - Portal
+        - AMS Referral
+    CP_Type__c:                  # need requirement for this field
+      random_choice:
+        - Business
+        - Individual    
+    CP_Congressional_Request_Site_Link__c: "<h1>Terms</h1><p>${{fake.Sentence}}</p>" 
+    CP_Spouse_Taxpayer_Identifying_Number__c: ${{fake.SSN}}
+    CP_Taxpayer_Identifying_Number__c: ${{fake.SSN}}
+    CP_Spouse_Title__c: ${{fake.job()}}
+    CP_Title__c: ${{fake.job()}}
+    CP_Congressional_Contact_Text__c: ${{fake.Text(max_nb_chars=100)}}
+    CP_Business_Name__c: ${{fake.company}}
+    CP_Legal_Representative_Name__c: ${{fake.name()}}
+    CP_Taxpayer_Name_Text__c: ${{fake.name()}}
+    CP_First_Name__c: ${{fake.first_name}}
+    CP_Last_Name__c: ${{fake.last_name()}}
+    CP_Middle_Name__c: ${{fake.first_name}}
+    CP_Spouse_First_Name__c: ${{fake.first_name}}
+    CP_Spouse_Last_Name__c: ${{fake.last_name}}
+    CP_Spouse_Middle_Name__c: ${{fake.first_name}}
+    CP_Tax_Form_Number__c: ${{fake.bothify(text='??-####')}} 
+    CP_Tax_Years_or_Periods__c: ${{fake.year()}}-${{fake.year()}}
+    TAS_Case_Number_Text__c: ${{fake.bothify(text='TAS-####')}} 
+    TAS_Request_Status_Text__c: ${{fake.sentence(nb_words=3)}}
+    # CP_Address__Street__s: ${{fake.StreetAddress}}  
+    CP_Address__City__s: ${{fake.City}}
+    CP_Address__PostalCode__s: ${{fake.postcode}}
+    # CP_Address__c.state: ${{fake.State}}             # not needed as postal code drives country, state
+    # CP_Address__StateCode__s: ${{fake.state_abbr}}
+    # CP_Address__CountryCode__s: ${{fake.country_code}}
+    # CP_Address__Country__s: ${{fake.country}}
+ 

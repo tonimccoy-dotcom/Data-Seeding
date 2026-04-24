@@ -1,0 +1,126 @@
+- plugin: snowfakery.standard_plugins.Salesforce.SalesforceQuery
+- plugin: snowfakery.standard_plugins.Salesforce
+- plugin: snowfakery.standard_plugins.Salesforce.SOQLDataset
+
+- snowfakery_version: 3
+- object: Matter__c
+  count: 4
+  fields:
+    CASE_NAME__C: ${{fake.name}}
+    RecordTypeId:
+      random_choice: 
+         - '012SJ000001RUrEYAW' # Docketed(Other)
+         - '012830000004QqhAAE' # Non-docketed
+         - '012830000004QqgAAE' #Tax Court
+    DOCKET_NUMBER__C:
+      if:
+          - choice:
+              when: ${{RecordTypeId=='012830000004QqgAAE'}}
+              pick:
+                random_choice:
+                  - ${{fake.pyint(min_value = 1, max_value = 99)}} - ${{fake.pyint(min_value = 1, max_value = 50000)}} 
+          - choice:
+              when: ${{RecordTypeId=='012830000004QqhAAE'}}
+              pick:
+                random_choice:
+                  - ''
+          - choice:
+              when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
+              pick:
+                random_choice:
+                  - ''                                     
+    Classification__c:
+      if:
+          - choice:
+              when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
+              pick:
+                random_choice:
+                  - 'Standard'
+                  - 'Settlement Option Procedure (SOP)' 
+          - choice:
+              when: ${{RecordTypeId=='012830000004QqhAAE'}}
+              pick:
+                random_choice:
+                  - ''
+          - choice:
+              when: ${{RecordTypeId=='012830000004QqgAAE'}}
+              pick:
+                random_choice:
+                  - ''                                   
+    CASE_TYPE__C:
+      if:
+          - choice:
+              when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
+              pick:
+                random_choice:
+                  - 'Tax Litigation'
+          - choice:
+              when: ${{RecordTypeId=='012830000004QqhAAE'}}
+              pick:
+                random_choice:
+                    - 'Tax Litigation'
+          - choice:
+              when: ${{RecordTypeId=='012830000004QqgAAE'}}
+              pick:
+                random_choice:
+                    - 'Small' 
+    CASE_SUB_TYPE__C:
+      if:
+        - choice:
+            when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
+            pick:
+              random_choice:
+                - 'Refund'
+        - choice:
+            when: ${{RecordTypeId=='012830000004QqhAAE'}}
+            pick:
+              random_choice:
+                  - 'Other'
+                  - 'SNR'
+        - choice:
+            when: ${{RecordTypeId=='012830000004QqgAAE'}}
+            pick:
+              random_choice:
+                - ''                  
+    PARTY_TYPE__C: 'Petitioner'
+    PREFERRED_TRIAL_LOCATION__C: 'Chicago'
+    SERVICE_INDICATOR__C: 'None'
+    Service_Date__c: 
+      date_between:
+        start_date: -30d
+        end_date: +5d
+    Stage__c:
+      if:
+        - choice:
+            when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
+            pick:
+              random_choice:
+                - 'New'
+        - choice:
+            when: ${{RecordTypeId=='012830000004QqhAAE'}}
+            pick:
+              random_choice:
+                  - 'Intake'
+        - choice:
+            when: ${{RecordTypeId=='012830000004QqgAAE'}}
+            pick:
+              random_choice:
+                - 'Intake'  
+    Status__c: 'Open'
+    CC_Organization__c:
+      if:
+        - choice:
+            when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
+            pick:
+              random_choice:
+                - ''
+        - choice:
+            when: ${{RecordTypeId=='012830000004QqhAAE'}}
+            pick:
+              random_choice:
+                  - 'CC:ITA'
+        - choice:
+            when: ${{RecordTypeId=='012830000004QqgAAE'}}
+            pick:
+              random_choice:
+                - ''
