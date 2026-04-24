@@ -80,15 +80,3 @@
               random_choice:
                 - 'Intake'  
     Status__c: 'Open'
-    CC_Organization__c:
-      if:
-        - choice:
-            when: ${{RecordTypeId=='012830000004QqhAAE'}}
-            pick:
-              random_choice:
-                  - 'CC:ITA'
-        - choice:
-            when: ${{RecordTypeId=='012830000004QqgAAE'}}
-            pick:
-              random_choice:
-                - ''
