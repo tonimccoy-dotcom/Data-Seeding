@@ -22,19 +22,7 @@
               when: ${{RecordTypeId=='012830000004QqhAAE'}}
               pick:
                 random_choice:
-                  - ''                                  
-    Classification__c:
-      if:
-          - choice:
-              when: ${{RecordTypeId=='012830000004QqhAAE'}}
-              pick:
-                random_choice:
-                  - ''
-          - choice:
-              when: ${{RecordTypeId=='012830000004QqgAAE'}}
-              pick:
-                random_choice:
-                  - ''                                   
+                  - ''                                                                   
     CASE_TYPE__C:
       if:
           - choice:
