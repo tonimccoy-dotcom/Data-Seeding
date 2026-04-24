@@ -9,7 +9,6 @@
     CASE_NAME__C: ${{fake.name}}
     RecordTypeId:
       random_choice: 
-         - '012SJ000001RUrEYAW' # Docketed(Other)
          - '012830000004QqhAAE' # Non-docketed
          - '012830000004QqgAAE' #Tax Court
     DOCKET_NUMBER__C:
@@ -23,20 +22,9 @@
               when: ${{RecordTypeId=='012830000004QqhAAE'}}
               pick:
                 random_choice:
-                  - ''
-          - choice:
-              when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
-              pick:
-                random_choice:
-                  - ''                                     
+                  - ''                                  
     Classification__c:
       if:
-          - choice:
-              when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
-              pick:
-                random_choice:
-                  - 'Standard'
-                  - 'Settlement Option Procedure (SOP)' 
           - choice:
               when: ${{RecordTypeId=='012830000004QqhAAE'}}
               pick:
@@ -50,11 +38,6 @@
     CASE_TYPE__C:
       if:
           - choice:
-              when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
-              pick:
-                random_choice:
-                  - 'Tax Litigation'
-          - choice:
               when: ${{RecordTypeId=='012830000004QqhAAE'}}
               pick:
                 random_choice:
@@ -66,11 +49,6 @@
                     - 'Small' 
     CASE_SUB_TYPE__C:
       if:
-        - choice:
-            when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
-            pick:
-              random_choice:
-                - 'Refund'
         - choice:
             when: ${{RecordTypeId=='012830000004QqhAAE'}}
             pick:
@@ -92,11 +70,6 @@
     Stage__c:
       if:
         - choice:
-            when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
-            pick:
-              random_choice:
-                - 'New'
-        - choice:
             when: ${{RecordTypeId=='012830000004QqhAAE'}}
             pick:
               random_choice:
@@ -109,11 +82,6 @@
     Status__c: 'Open'
     CC_Organization__c:
       if:
-        - choice:
-            when: ${{RecordTypeId=='012SJ000001RUrEYAW'}}
-            pick:
-              random_choice:
-                - ''
         - choice:
             when: ${{RecordTypeId=='012830000004QqhAAE'}}
             pick:
