@@ -1,0 +1,112 @@
+- plugin: snowfakery.standard_plugins.Salesforce.SalesforceQuery
+- plugin: snowfakery.standard_plugins.Salesforce
+- plugin: snowfakery.standard_plugins.Salesforce.SOQLDataset
+
+- snowfakery_version: 3
+- object: Matter__c
+  count: 3
+  fields:
+    CASE_NAME__C: ${{fake.name}}
+    RecordType: Matter
+    DOCKET_NUMBER__C: ${{fake.RandomNumber(fix_len=False, digits=9)}}                              
+    CASE_TYPE__C: 
+      random_choice: 
+          - 'Small'
+          - 'Regular'
+          - 'Declaratory Judgement'
+    CASE_SUB_TYPE__C:
+      if:
+        - choice:
+            when: ${{CASE_TYPE__C=='Regular'}}
+            pick:
+              random_choice:
+                - 'Due Process'
+                - 'Deficiency'
+                - 'Disclosure'
+                - 'Interest Abatement'
+        - choice:
+            when: ${{CASE_TYPE__C=='Declaratory Judgement'}}
+            pick:
+              random_choice:
+                  - 'Exempt Organization'
+                  - 'Retirement Plan'
+        - choice:
+            when: ${{CASE_TYPE__C=='Small'}}
+            pick:
+              random_choice:
+                  - 'Deficiency'
+                  - 'Due Process'              
+    PARTY_TYPE__C: 'Petitioner'
+    TAX_TYPE__C:
+      random_choice: 
+          - 'Income - Individual'
+          - 'Income - Corporate'
+          - 'TEFRA'
+          - 'Other'
+    PREFERRED_TRIAL_LOCATION__C: 'Chicago'
+    SERVICE_INDICATOR__C: 'None'
+    BOD_Code__c: 
+      random_choice: 
+          - 'Taxpayer Services'
+          - 'Wage and Investment'
+          - 'Large Business and International'
+    Service_Date__c: 
+      date_between:
+        start_date: today
+        end_date: +10d
+    Stage__c: 'Intake'  
+    Status__c: 'Open'
+    Description__c: 'Certificate Of Service'
+    OwnerId: '005SJ00000M4TTNYA3'
+    Matter_Participant:
+      - object: Matter_Participant__c
+        count: 2
+        fields:
+          Matter__c:
+            reference: Matter__c
+          BAR_NUMBER__C: RT-${{fake.pyint( min_value = 1000, max_value = 100000)}}
+          EMAIL__C:  ${{ fake.ascii_safe_email}}
+          NAME__C: ${{fake.name}}
+          PHONE__C: ${{fake.pyint(min_value = 100, max_value = 900)}}-${{fake.pyint( min_value = 100, max_value = 999)}}-${{fake.pyint( min_value = 1000, max_value = 9000)}}
+          PREFERRED_SERVICE_METHOD__C: 'Electronic'
+          SOURCE__C: 'Dawson'
+          TYPE__C:
+            random_choice:
+              - 'Petitioner'
+              - 'Taxpayer'
+              - 'Practitioner'
+              - 'Law Firm'
+          RecordType: Standard_Participant
+    Tax_and_Penalty:
+      - object: Tax_and_Penalty__c
+        count: 1
+        fields:
+          Matter__c:
+            reference: Matter__c
+          Dismissed__c: 'False'
+          Tax_Year__c: ${{fake.RandomElement(elements=('2021', '2022', '2023'))}}
+          Tax_at_Issue__c: ${{fake.pyint( min_value = 100000, max_value = 500000)}}
+          Penalty_at_Issue__c: ${{fake.pyint( min_value = 500, max_value = 6000)}}
+          Penalty_Code__c: ${{fake.RandomElement(elements=('6663', '6654', '6662'))}}
+    Penalty:
+      - object: Penalty__c
+        count: 1
+        fields:
+          Matter__c:
+            reference: Matter__c
+          Tax_and_Penalty__c:
+            reference: Tax_and_Penalty__c
+          Penalty_at_Issue__c: ${{fake.pyint( min_value = 500, max_value = 6000)}}
+          Penalty_Code__c: ${{fake.RandomElement(elements=('6652', '6653', '6654', '6655', '6656'))}}
+    UIL:
+      - object: Matter_UIL_Code__c
+        count: 1
+        fields:
+          Matter__c:
+            reference: Matter__c
+          Uniform_Issue_List_UIL_Code__c: # can automate this process by extracting data from Salesforce
+            random_choice:
+              - 'a0W8300000099aOEAQ' # Lab
+              - 'a0W8300000099aPEAQ' # Lab
+              - 'a0WSJ000005TgQF2A0' # Lab
+              - 'a0WSJ000005TfLD2A0' # Lab

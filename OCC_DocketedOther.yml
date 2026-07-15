@@ -1,0 +1,85 @@
+- plugin: snowfakery.standard_plugins.Salesforce.SalesforceQuery
+- plugin: snowfakery.standard_plugins.Salesforce
+- plugin: snowfakery.standard_plugins.Salesforce.SOQLDataset
+
+- snowfakery_version: 3
+- object: Matter__c
+  count: 4
+  fields:
+    CASE_NAME__C: ${{fake.name}}
+    RecordType: Docketed_Other
+    DOCKET_NUMBER__C: ''                              
+    CASE_TYPE__C: 
+      random_choice: 
+          - 'Disclosure'
+          - 'General Litigation'
+          - 'Tax Litigation'
+    CASE_SUB_TYPE__C:
+      if:
+        - choice:
+            when: ${{CASE_TYPE__C=='Disclosure'}}
+            pick:
+              random_choice:
+                - 'Disclosure'
+                - 'Freedom of Information Act (FOIA)'
+                - 'Privacy Act Litigation (PAL)'
+        - choice:
+            when: ${{CASE_TYPE__C=='General Litigation'}}
+            pick:
+              random_choice:
+                  - 'Bankruptcy'
+                  - 'CLAG'
+                  - 'Writ'
+        - choice:
+            when: ${{CASE_TYPE__C=='Tax Litigation'}}
+            pick:
+              random_choice:
+                  - 'Other'
+                  - 'Refund' 
+    TAX_TYPE__C:
+      random_choice: 
+          - 'Income - Individual'
+          - 'Income - Corporate'
+          - 'TEFRA'
+          - 'Other'
+    Classification__c:
+      random_choice: 
+          - 'Settlement Option Procedure (SOP)'
+          - 'Standard'
+    PREFERRED_TRIAL_LOCATION__C: 'Chicago'
+    SERVICE_INDICATOR__C: 'None'
+    BOD_Code__c: 
+      random_choice: 
+          - 'Taxpayer Services'
+          - 'Wage and Investment'
+          - 'Large Business and International'
+    Service_Date__c: 
+      date_between:
+        start_date: today
+        end_date: +10d
+    Stage__c: 'New'  
+    Status__c: 'Open'
+    CC_Organization__c : ## Need to automate --receiving error message
+          random_choice: 
+          - 'a0dcn000008G9B8AAK'
+          - 'a0dcn000008FvdnAAC'
+          - 'a0dcn000008G9BOAA0'
+    OwnerId: '005cn00000HobRbAAJ'
+    Matter_Participant:
+      - object: Matter_Participant__c
+        count: 2
+        fields:
+          Matter__c:
+            reference: Matter__c
+          BAR_NUMBER__C: RT-${{fake.pyint( min_value = 1000, max_value = 100000)}}
+          EMAIL__C:  ${{ fake.ascii_safe_email}}
+          NAME__C: ${{fake.name}}
+          PHONE__C: ${{fake.pyint(min_value = 100, max_value = 900)}}-${{fake.pyint( min_value = 100, max_value = 999)}}-${{fake.pyint( min_value = 1000, max_value = 9000)}}
+          PREFERRED_SERVICE_METHOD__C: 'Electronic'
+          TYPE__C:
+            random_choice:
+              - 'Expert Witness'
+              - 'Taxpayer'
+              - 'CC Attorney'
+              - 'Legal Representative'
+          RecordType: Standard_Participant_Docketed_Other

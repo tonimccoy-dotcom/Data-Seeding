@@ -1,0 +1,62 @@
+- plugin: snowfakery.standard_plugins.Salesforce.SalesforceQuery
+- plugin: snowfakery.standard_plugins.Salesforce
+- plugin: snowfakery.standard_plugins.Salesforce.SOQLDataset
+
+- snowfakery_version: 3
+- object: Matter__c
+  count: 4
+  fields:
+    CASE_NAME__C: ${{fake.name}}
+    RecordType: Non_Docketed        
+    CASE_TYPE__C: 
+      random_choice: 
+          - 'Advisory'
+          - 'Training'
+          - 'Tax Litigation'
+    CASE_SUB_TYPE__C:
+      if:
+        - choice:
+            when: ${{CASE_TYPE__C=='Advisory'}}
+            pick:
+              random_choice:
+                - 'FILE'
+                - 'APA'
+                - 'Disclosure'
+        - choice:
+            when: ${{CASE_TYPE__C=='Training'}}
+            pick:
+              random_choice:
+                  - 'CCDM'
+                  - 'TRNINT'
+                  - 'TRNIRS'
+        - choice:
+            when: ${{CASE_TYPE__C=='Tax Litigation'}}
+            pick:
+              random_choice:
+                  - 'CLAG'
+                  - 'PAR' 
+    TAX_TYPE__C:
+      random_choice: 
+          - 'Income - Individual'
+          - 'Income - Corporate'
+          - 'TEFRA'
+          - 'Other'
+    PREFERRED_TRIAL_LOCATION__C: 'Chicago'
+    SERVICE_INDICATOR__C: 'None'
+    BOD_Code__c: 
+      random_choice: 
+          - 'Taxpayer Services'
+          - 'Wage and Investment'
+          - 'Large Business and International'
+    Service_Date__c: 
+      date_between:
+        start_date: today
+        end_date: +10d
+    Stage__c: 'Intake'  
+    Status__c: 'Open'
+    CC_Organization__c : ## Need to automate --receiving error message
+          random_choice: 
+          - 'a0dcn000008G9B8AAK'
+          - 'a0dcn000008FvdnAAC'
+          - 'a0dcn000008G9BOAA0'
+    OwnerId: '005cn00000HobRbAAJ'
